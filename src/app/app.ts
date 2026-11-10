@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { TarifaFormComponent } from './components/tarifa-form/tarifa-form.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TarifaFormComponent],
-  template: `
-    <app-tarifa-form></app-tarifa-form>
-  `,
+  imports: [RouterOutlet], // <-- Importante
+  template: `<router-outlet></router-outlet>`,
   styles: []
 })
 export class App {

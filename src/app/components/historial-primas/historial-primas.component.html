@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <h2>Historial de Primas Generadas (En Memoria)</h2>
+      <button class="btn-back" (click)="volverAlFormulario()">Volver al Cotizador</button>
+    </div>
+
+    @if (datosCompletos().length === 0) {
+      <p class="no-data">No hay primas generadas en esta sesión.</p>
+    } @else {
+      <table class="tabla-primas">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Valor Comercial</th>
+            <th>Antigüedad</th>
+            <th>Edad</th>
+            <th>Siniestros</th>
+            <th>Prima Anual</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of datosPaginados(); track item.fecha; let i = $index) {
+            <tr [class.fila-alterna]="i % 2 !== 0">
+              <td>{{ item.fecha }}</td>
+              <td>{{ item.pnuValcomVeh | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+              <td>{{ item.pnuAntgVeh }} años</td>
+              <td>{{ item.pnuEdacli }}</td>
+              <td>{{ item.pnuCansini }}</td>
+              <td class="prima-valor">{{ item.tarifa | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Controles de Paginación -->
+      <div class="pagination">
+        <button (click)="cambiarPagina(paginaActual() - 1)" [disabled]="paginaActual() === 1">
+          Anterior
+        </button>
+        <span>Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
+        <button (click)="cambiarPagina(paginaActual() + 1)" [disabled]="paginaActual() === totalPaginas()">
+          Siguiente
+        </button>
+      </div>
+    }
+  </div>
+</div>

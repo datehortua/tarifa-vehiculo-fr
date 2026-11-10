@@ -8,7 +8,7 @@
       <!-- Valor Comercial -->
       <div class="form-group">
         <label>Valor Comercial del Vehículo ($)</label>
-        <input type="number" formControlName="pnuValcomVeh" placeholder="Ej: 50000000" />
+        <input type="text" inputmode="numeric" pattern="[0-9]*" formControlName="pnuValcomVeh" placeholder="Ej: 50000000" (input)="soloNumeros($event)" />
         <div class="error" *ngIf="campoInvalido('pnuValcomVeh')">
           El valor es obligatorio y debe ser mayor a 0.
         </div>
@@ -17,25 +17,25 @@
       <!-- Antigüedad -->
       <div class="form-group">
         <label>Antigüedad del Vehículo (Años)</label>
-        <input type="number" formControlName="pnuAntgVeh" placeholder="Ej: 10" />
+        <input type="text" inputmode="numeric" pattern="[1-9]*" formControlName="pnuAntgVeh" placeholder="Ej: 10" (input)="soloNumeros($event)" />
         <div class="error" *ngIf="campoInvalido('pnuAntgVeh')">
-          La antigüedad es obligatoria y debe ser mayor o igual a 0.
+          La antigüedad es obligatoria y debe ser mayor a 0.
         </div>
       </div>
 
       <!-- Edad Cliente -->
       <div class="form-group">
         <label>Edad del Cliente</label>
-        <input type="number" formControlName="pnuEdacli" placeholder="Ej: 20" />
+        <input type="text" inputmode="numeric" pattern="[0-9]*" formControlName="pnuEdacli" placeholder="Ej: 20" maxlength="2" max="99" min="18" (input)="soloNumeros($event)" />
         <div class="error" *ngIf="campoInvalido('pnuEdacli')">
-          La edad es obligatoria y debe ser entre 18 y 100 años.
+          La edad es obligatoria y debe ser entre 18 y 99 años.
         </div>
       </div>
 
       <!-- Cantidad Siniestros -->
       <div class="form-group">
         <label>Cantidad de Siniestros (Último año)</label>
-        <input type="number" formControlName="pnuCansini" placeholder="Ej: 2" />
+        <input type="text" inputmode="numeric" pattern="[0-9]*" formControlName="pnuCansini" placeholder="Ej: 2" (input)="soloNumeros($event)" />
         <div class="error" *ngIf="campoInvalido('pnuCansini')">
           La cantidad de siniestros es obligatoria y debe ser mayor o igual a 0.
         </div>
@@ -46,7 +46,7 @@
       </button>
     </form>
 
-        <!-- Mensaje de Error Técnico -->
+    <!-- Mensaje de Error Técnico -->
     @if (errorTecnico) {
       <div class="result-card error">
         <h3>Error de conexión</h3>
@@ -61,7 +61,7 @@
         <!-- Caso Exitoso -->
         @if (res.exitoso) {
           <div>
-            <h3>Tarifa Calculada</h3>
+            <h3>Prima Anual de Seguro Vehicular</h3>
             <p class="tarifa-valor">{{ res.tarifa | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
           </div>
         }
@@ -76,5 +76,22 @@
         }
       </div>
     }
+
+    <!-- Botón para ir al historial (Siempre visible) -->
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button
+          type="button"
+          class="btn-historial"
+          (click)="irAHistorial()"
+          [disabled]="historialService.historial().length === 0"
+          [style.opacity]="historialService.historial().length === 0 ? '0.5' : '1'"
+          style="background-color: #10b981; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%;">
+
+          Ver Historial de Primas
+          @if (historialService.historial().length > 0) {
+            ({{ historialService.historial().length }})
+          }
+        </button>
+      </div>
   </div>
 </div>

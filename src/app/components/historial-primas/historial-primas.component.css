@@ -1,0 +1,16 @@
+.container { display: flex; justify-content: center; padding: 2rem; background-color: #f3f4f6; min-height: 100vh; }
+.card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; max-width: 800px; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+h2 { color: #1f2937; margin: 0; }
+.btn-back { padding: 0.5rem 1rem; background-color: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; }
+.btn-back:hover { background-color: #4b5563; }
+.tabla-primas { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.tabla-primas th, .tabla-primas td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 0.9rem; }
+.tabla-primas th { background-color: #f9fafb; color: #374151; font-weight: 600; }
+.prima-valor { font-weight: bold; color: #059669; }
+.no-data { text-align: center; color: #6b7280; padding: 2rem; }
+.pagination { display: flex; justify-content: space-between; align-items: center; }
+.pagination button { padding: 0.5rem 1rem; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; }
+.pagination button:disabled { background-color: #d1d5db; cursor: not-allowed; }
+.pagination span { color: #4b5563; font-weight: 500; }
+.fila-alterna { background-color: #f9fafb; }

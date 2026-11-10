@@ -321,7 +321,90 @@ git checkout -b feature/nueva-funcionalidad
 5. Revisar cambios antes de merge.
 6. Subir a la rama correspondiente.
 
-## 18. Despliegue
+## 18. Riesgos y consideraciones de negocio
+
+Durante el desarrollo del proyecto se identifican varios riesgos y factores que deben gestionarse con atención:
+
+### 18.1. Riesgos funcionales
+
+- Dependencia del backend para la validación final del cálculo.
+- Cambios en las reglas de negocio pueden requerir ajustes tanto en frontend como en backend.
+- Error de integridad en los datos enviados desde el formulario puede producir resultados inconsistentes.
+
+### 18.2. Riesgos técnicos
+
+- El historial está almacenado en memoria (`signal`), por lo que no persiste tras recarga de página.
+- La app no implementa aún persistencia de datos en almacenamiento local o base de datos.
+- Si se duplican validaciones entre frontend y backend, puede haber riesgo de divergencia de reglas.
+- La aplicación está orientada a un entorno cercano a un microsistema, por lo que su escalabilidad depende de la evolución del backend asociado.
+
+### 18.3. Riesgos de experiencia de usuario
+
+- Si la API responde lento, la interfaz puede percibirse como poco fluida.
+- Errores no previstos pueden dejar la app sin feedback claro para el usuario.
+- En formularios complejos, la lógica de validación debe mantenerse clara para evitar frustración.
+
+## 19. Limitantes actuales
+
+La solución actual presenta las siguientes limitantes:
+
+- Persistencia limitada del historial: los cálculos se almacenan solo en memoria durante la sesión.
+- Dependencia explícita del backend para reglas de cálculo y validación final.
+- No hay autenticación ni control de usuarios implementado en esta capa.
+- No existe una estrategia formal de caché ni de reintentos para llamadas HTTP fallidas.
+- La experiencia de usuario aún es funcional, pero no está optimizada para escenarios masivos o complejidad alta de datos.
+- El manejo de errores está centralizado, pero no se integra con un sistema de logging profesional ni monitoreo de producción.
+
+## 20. Alternativas consideradas
+
+Durante la definición del proyecto se evaluaron varias alternativas de implementación:
+
+### 20.1. Implementación con formularios tradicionales
+
+Se consideró una solución basada en formularios simples y lógica directa en componentes. Esta opción reduce la complejidad inicial, pero escala peor cuando el código crece y la validación se vuelve más compleja.
+
+### 20.2. Uso de gestión de estado centralizada
+
+Se evaluó el uso de `NgRx`, `Akita` o un store global para manejar el historial y el resultado del cálculo. Aunque ofrece mayor control en aplicaciones complejas, resultó más pesado para una app de este alcance. La arquitectura actual simplifica el proyecto y mantiene buena mantenibilidad.
+
+### 20.3. Persistencia local en navegador
+
+Se analizó la posibilidad de guardar el historial en `localStorage` o `sessionStorage`. Esta alternativa es viable para persistencia básica y sin backend, pero requiere definir políticas de almacenamiento y limpieza. Si bien es útil, la solución actual prioriza simplicidad y rapidez de desarrollo.
+
+### 20.4. Arquitectura con más capas y separación de dominio
+
+Se contempló una estructura con módulos más formales, modelos de dominio y casos de uso separados. Esto sería adecuado para aplicaciones mucho más grandes, pero resulta excesivo para el alcance actual del proyecto.
+
+## 21. Decisión adoptada
+
+Se decidió implementar una solución con:
+
+- Angular standalone components,
+- formularios reactivos,
+- servicios inyectados por raíz,
+- comunicación HTTP con `HttpClient`,
+- historial en memoria con `signal`.
+
+Esta opción ofrece un equilibrio adecuado entre:
+
+- simplicidad,
+- rapidez de implementación,
+- claridad de código,
+- mantenibilidad,
+- compatibilidad con Angular 21.
+
+## 22. Recomendaciones futuras
+
+Para mitigar límites y riesgos del proyecto, se recomienda en una siguiente fase:
+
+- persistir el historial en localStorage o backend,
+- centralizar alertas y manejo de errores con un servicio global,
+- establecer consistencia entre validación frontend y backend,
+- incorporar pruebas E2E con Cypress,
+- definir una política de caché y reintentos para llamadas HTTP,
+- evaluar la necesidad de estado global si la app crece en complejidad.
+
+## 23. Despliegue
 
 La aplicación puede desplegarse en entornos web estáticos o en infraestructura con Node/Angular SSR según el requerimiento del proyecto. Para producción se recomienda:
 
@@ -331,7 +414,7 @@ La aplicación puede desplegarse en entornos web estáticos o en infraestructura
 - mantener una build de producción,
 - monitorear errores y rendimiento en ambiente real.
 
-## 19. Mantenimiento y evolución
+## 24. Mantenimiento y evolución
 
 Para mantener el proyecto saludable y escalable, se recomienda:
 
@@ -341,18 +424,18 @@ Para mantener el proyecto saludable y escalable, se recomienda:
 - documentar cambios funcionales,
 - validar compatibilidad con el backend y reglas de negocio.
 
-## 20. Resumen ejecutivo
+## 25. Resumen ejecutivo
 
 Tarifa Frontend es una aplicación Angular moderna, enfocada en la captura y cálculo de tarifas de seguros o primas. Su diseño actual combina formularios reactivos, servicios HTTP, enrutamiento, componentes standalone y señales para gestionar el historial en memoria. La arquitectura actual permite un desarrollo ordenado, fácil de mantener y adecuado para futuras ampliaciones del sistema.
 
-## 21. Responsable del proyecto
+## 26. Responsable del proyecto
 
 - Frontend: Angular 21
 - Estado: en desarrollo
 - Repositorio: [adjuntar URL del repositorio]
 - Backend asociado: [adjuntar URL o nombre del servicio]
 
-## 22. Contacto
+## 27. Contacto
 
 - Equipo de desarrollo: [nombre o responsable]
 - Correo: [email]

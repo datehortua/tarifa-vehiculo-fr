@@ -27,8 +27,8 @@ export class TarifaFormComponent {
     private router: Router // <-- Inyectar
   ) {
     this.tarifaForm = this.fb.group({
-      pnuValcomVeh: [null, [Validators.required, Validators.min(0)]],
-      pnuAntgVeh: [null, [Validators.required, Validators.min(0)]],
+      pnuValcomVeh: [null, [Validators.required, Validators.min(20000000)]],
+      pnuAntgVeh: [null, [Validators.required, Validators.min(1)]],
       pnuEdacli: [null, [Validators.required, Validators.min(18), Validators.max(99), Validators.pattern('^[0-9]{1,2}$')]],
       pnuCansini: [null, [Validators.required, Validators.min(0)]]
     });
@@ -84,12 +84,24 @@ export class TarifaFormComponent {
 
     // Método para filtrar letras y símbolos
     soloNumeros(event: Event) {
-      const input = event.target as HTMLInputElement;
-      // Reemplaza todo lo que no sea un dígito del 0 al 9 por vacío
-      input.value = input.value.replace(/[^0-9]/g, '');
+        const input = event.target as HTMLInputElement;
 
-      // Actualiza el valor del formulario reactivo
-      this.tarifaForm.get(input.getAttribute('formControlName')!)?.setValue(input.value);
+        // 1. Quitamos letras y símbolos
+        let valorLimpio = input.value.replace(/[^0-9]/g, '');
+
+        // 2. Actualizamos el valor visual del input
+        input.value = valorLimpio;
+
+        // 3. Obtenemos el nombre del campo (pnuAntgVeh, pnuEdacli, etc.)
+        const controlName = input.getAttribute('formControlName');
+
+        if (controlName) {
+          // 4. Convertimos a número (si está vacío, guardamos null para que 'required' funcione)
+          const valorNumerico = valorLimpio === '' ? null : Number(valorLimpio);
+
+          // 5. Actualizamos el formulario reactivo
+          this.tarifaForm.get(controlName)?.setValue(valorNumerico);
+        }
     }
 
   // Método para navegar a la vista de historial

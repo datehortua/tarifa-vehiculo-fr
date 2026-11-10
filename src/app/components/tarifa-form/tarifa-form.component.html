@@ -17,7 +17,7 @@
       <!-- Antigüedad -->
       <div class="form-group">
         <label>Antigüedad del Vehículo (Años)</label>
-        <input type="text" inputmode="numeric" pattern="[1-9]*" formControlName="pnuAntgVeh" placeholder="Ej: 10" (input)="soloNumeros($event)" />
+        <input type="text" inputmode="numeric" pattern="[0-9]*" formControlName="pnuAntgVeh" placeholder="Ej: 10" (input)="soloNumeros($event)" />
         <div class="error" *ngIf="campoInvalido('pnuAntgVeh')">
           La antigüedad es obligatoria y debe ser mayor a 0.
         </div>

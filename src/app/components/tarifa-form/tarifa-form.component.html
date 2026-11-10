@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="card">
+    <h2>Cotizador de Seguro de Vehículo</h2>
+    <p class="subtitle">Ingresa los datos para calcular la tarifa</p>
+
+    <form [formGroup]="tarifaForm" (ngSubmit)="onSubmit()">
+
+      <!-- Valor Comercial -->
+      <div class="form-group">
+        <label>Valor Comercial del Vehículo ($)</label>
+        <input type="number" formControlName="pnuValcomVeh" placeholder="Ej: 50000000" />
+        <div class="error" *ngIf="campoInvalido('pnuValcomVeh')">
+          El valor es obligatorio y debe ser mayor a 0.
+        </div>
+      </div>
+
+      <!-- Antigüedad -->
+      <div class="form-group">
+        <label>Antigüedad del Vehículo (Años)</label>
+        <input type="number" formControlName="pnuAntgVeh" placeholder="Ej: 10" />
+        <div class="error" *ngIf="campoInvalido('pnuAntgVeh')">
+          La antigüedad es obligatoria y debe ser mayor o igual a 0.
+        </div>
+      </div>
+
+      <!-- Edad Cliente -->
+      <div class="form-group">
+        <label>Edad del Cliente</label>
+        <input type="number" formControlName="pnuEdacli" placeholder="Ej: 20" />
+        <div class="error" *ngIf="campoInvalido('pnuEdacli')">
+          La edad es obligatoria y debe ser entre 18 y 100 años.
+        </div>
+      </div>
+
+      <!-- Cantidad Siniestros -->
+      <div class="form-group">
+        <label>Cantidad de Siniestros (Último año)</label>
+        <input type="number" formControlName="pnuCansini" placeholder="Ej: 2" />
+        <div class="error" *ngIf="campoInvalido('pnuCansini')">
+          La cantidad de siniestros es obligatoria y debe ser mayor o igual a 0.
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Calculando...' : 'Calcular Tarifa' }}
+      </button>
+    </form>
+
+        <!-- Mensaje de Error Técnico -->
+    @if (errorTecnico) {
+      <div class="result-card error">
+        <h3>Error de conexión</h3>
+        <p>No se pudo comunicar con el servidor o hubo un error interno.</p>
+      </div>
+    }
+
+    <!-- Resultado del Backend -->
+    @if (resultado; as res) {
+      <div class="result-card" [ngClass]="res.exitoso ? 'success' : 'warning'">
+
+        <!-- Caso Exitoso -->
+        @if (res.exitoso) {
+          <div>
+            <h3>Tarifa Calculada</h3>
+            <p class="tarifa-valor">{{ res.tarifa | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+          </div>
+        }
+
+        <!-- Caso Error de Regla de Negocio -->
+        @if (!res.exitoso) {
+          <div>
+            <h3>No se puede cotizar</h3>
+            <p><strong>Código de error:</strong> {{ res.salerr }}</p>
+            <p><strong>Detalle:</strong> {{ res.pvaSalerr }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
